@@ -1,11 +1,10 @@
 package 한혜현;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,6 +20,7 @@ import javax.swing.JTextField;
  * 2024-10-27
  * 2024-10-28
  * 2024-10-29
+ * 2024-10-30
  */
 public class calculator extends JFrame implements ActionListener{
 	JTextField t;
@@ -50,7 +50,6 @@ public class calculator extends JFrame implements ActionListener{
 	JButton 곱하기=new JButton("×");
 	JButton 빼기=new JButton("-");
 	JButton 더하기=new JButton("+");
-	
 	void showSouth() {
 		Container c=getContentPane();
 		BoxLayout layout=new BoxLayout(c, BoxLayout.Y_AXIS);
@@ -72,14 +71,17 @@ public class calculator extends JFrame implements ActionListener{
 		panel.add(num);
 		panel.add(ope);
 		
-		
-		for(int i=0; i<12; i++) {
+		int[] numb = {7,8,9,4,5,6,1,2,3};
+		for(int i=0; i<numb.length; i++) {
 			bt[i]=new JButton();
-			if(i<3) bt[i].setText(Integer.toString(i+7));
-			if(i>2&&i<6) bt[i].setText(Integer.toString(i+1));
-			if(i>5&&i<9) bt[i].setText(Integer.toString(i-5));
+			bt[i].setText(Integer.toString(numb[i]));
 			bt[i].addActionListener(this);
 		}
+
+		나누기.addActionListener(this);
+		곱하기.addActionListener(this);
+		빼기.addActionListener(this);
+		더하기.addActionListener(this);
 		bt[9].setText(".");
 		bt[10].setText("0");
 		bt[11].setText("=");
@@ -92,48 +94,34 @@ public class calculator extends JFrame implements ActionListener{
 		ope.add(빼기);
 		ope.add(더하기);
 		
+		sb.setLength(0);
 	}
+	
+	StringBuilder sb = new StringBuilder();
 	public void actionPerformed(ActionEvent event) {
-		double[] num=new double[10];
-		String numi;
-		int i=0;
-		String s=t.getText();
+		
 		for(int j=0; j<9; j++) {
 			if(event.getSource()==bt[j]) {
-				s=t.getText();
-				if(j<3) t.setText(s+Integer.toString(j+7));
-				if(j>2&&j<6) t.setText(s+Integer.toString(j+1));
-				if(j>5&&j<9) t.setText(s+Integer.toString(j-5));
+				sb.append(bt[j].getText());
+				t.setText(sb.toString());
 			}
 		}
 		if(event.getSource()==bt[9]) {
-			t.setText(s+".");
+			sb.append(".");
+			t.setText(sb.toString());
 		}
 		if(event.getSource()==bt[10]) {
-			t.setText(s+"0");
+			sb.append("0");
+			t.setText(sb.toString());
 		}
 		if(event.getSource()==bt[11]) {
-			double sum=0;
-			for(int j=0; j<num.length; j++) {
-				sum=+num[j];
-			}
-			t.setText(String.valueOf(sum));
-		}
-		if(event.getSource()==나누기) {
-			t.setText("");
-		}
-		if(event.getSource()==곱하기) {
-			t.setText("");
-		}
-		if(event.getSource()==빼기) {
-			t.setText("");
+			
 		}
 		if(event.getSource()==더하기) {
-			numi=t.getText();
-			num[i]=Double.parseDouble(numi);
-			i++;
-			t.setText("");
+			sb.append("+");
+			t.setText(sb.toString());
 		}
+			
 	}
 	public static void main(String[] args) {
 		new calculator();
