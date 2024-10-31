@@ -21,6 +21,7 @@ import javax.swing.JTextField;
  * 2024-10-28
  * 2024-10-29
  * 2024-10-30
+ * 2024-10-31
  */
 public class calculator extends JFrame implements ActionListener{
 	JTextField t;
@@ -50,6 +51,9 @@ public class calculator extends JFrame implements ActionListener{
 	JButton 곱하기=new JButton("×");
 	JButton 빼기=new JButton("-");
 	JButton 더하기=new JButton("+");
+	JButton per=new JButton("%");
+	JButton C=new JButton("C");
+	JButton 지우기=new JButton("<×");
 	void showSouth() {
 		Container c=getContentPane();
 		BoxLayout layout=new BoxLayout(c, BoxLayout.Y_AXIS);
@@ -58,9 +62,6 @@ public class calculator extends JFrame implements ActionListener{
 		JPanel panel=new JPanel(new GridLayout(1,2));
 		c.add(clear);
 		c.add(panel);
-		JButton per=new JButton("%");
-		JButton C=new JButton("C");
-		JButton 지우기=new JButton("<×");
 		clear.add(per);
 		clear.add(C);
 		clear.add(지우기);
@@ -82,9 +83,15 @@ public class calculator extends JFrame implements ActionListener{
 		곱하기.addActionListener(this);
 		빼기.addActionListener(this);
 		더하기.addActionListener(this);
+		for(int i=9; i<=11; i++) {
+			bt[i]=new JButton();
+		}
 		bt[9].setText(".");
 		bt[10].setText("0");
 		bt[11].setText("=");
+		bt[9].addActionListener(this);
+		bt[10].addActionListener(this);
+		bt[11].addActionListener(this);
 		
 		for(int i=0; i<12; i++) {
 			num.add(bt[i]);
@@ -115,13 +122,55 @@ public class calculator extends JFrame implements ActionListener{
 			t.setText(sb.toString());
 		}
 		if(event.getSource()==bt[11]) {
-			
+			calc();
+		}
+		if(event.getSource()==나누기) {
+			sb.append("÷");
+			t.setText(sb.toString());
+		}
+		if(event.getSource()==곱하기) {
+			sb.append("×");
+			t.setText(sb.toString());
+		}
+		if(event.getSource()==빼기) {
+			sb.append("-");
+			t.setText(sb.toString());
 		}
 		if(event.getSource()==더하기) {
 			sb.append("+");
 			t.setText(sb.toString());
 		}
-			
+		if(event.getSource()==지우기) {
+			sb.delete(sb.length()-1,sb.length());
+			t.setText(sb.toString());
+		}
+		if(event.getSource()==C) {
+			sb.delete(0,sb.length());
+			t.setText(sb.toString());
+		}
+	}
+	private void calc() {
+		ArrayList<String> data = new ArrayList<String>();
+		for(int i=0; i<sb.length(); i++) {
+			data.add(i, sb.substring(i,i+1));
+		}
+		for(int i=1; i<data.size(); i=i+2) {
+			if(data.get(i)=="*") {
+				data.set(i-1, String.valueOf(Double.parseDouble(data.get(i-1))*Double.parseDouble(data.get(i+1))));
+			}
+			if(data.get(i)=="÷") {
+				data.set(i-1, String.valueOf(Double.parseDouble(data.get(i-1))/Double.parseDouble(data.get(i+1))));
+			}
+		}
+		for(int i=1; i<data.size(); i=i+2) {
+			if(data.get(i)=="+") {
+				data.set(i-1, String.valueOf(Double.parseDouble(data.get(i-1))+Double.parseDouble(data.get(i+1))));
+			}
+			if(data.get(i)=="-") {
+				data.set(i-1, String.valueOf(Double.parseDouble(data.get(i-1))-Double.parseDouble(data.get(i+1))));
+			}
+		}
+		t.setText(data.get(0));
 	}
 	public static void main(String[] args) {
 		new calculator();
