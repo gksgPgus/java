@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * 2024-10-15
+ * 2024-10-15: 최초생성
  * 2024-10-19
  * 2024-10-20
  * 2024-10-26
@@ -22,6 +22,7 @@ import javax.swing.JTextField;
  * 2024-10-29
  * 2024-10-30
  * 2024-10-31
+ * 2024-11-01
  */
 public class calculator extends JFrame implements ActionListener{
 	JTextField t;
@@ -79,6 +80,9 @@ public class calculator extends JFrame implements ActionListener{
 			bt[i].addActionListener(this);
 		}
 
+		per.addActionListener(this);
+		C.addActionListener(this);
+		지우기.addActionListener(this);
 		나누기.addActionListener(this);
 		곱하기.addActionListener(this);
 		빼기.addActionListener(this);
@@ -101,7 +105,6 @@ public class calculator extends JFrame implements ActionListener{
 		ope.add(빼기);
 		ope.add(더하기);
 		
-		sb.setLength(0);
 	}
 	
 	StringBuilder sb = new StringBuilder();
@@ -120,9 +123,6 @@ public class calculator extends JFrame implements ActionListener{
 		if(event.getSource()==bt[10]) {
 			sb.append("0");
 			t.setText(sb.toString());
-		}
-		if(event.getSource()==bt[11]) {
-			calc();
 		}
 		if(event.getSource()==나누기) {
 			sb.append("÷");
@@ -145,8 +145,13 @@ public class calculator extends JFrame implements ActionListener{
 			t.setText(sb.toString());
 		}
 		if(event.getSource()==C) {
-			sb.delete(0,sb.length());
+			sb.setLength(0);
 			t.setText(sb.toString());
+		}
+		
+		if(event.getSource()==bt[11]) {
+			calc();
+			sb.setLength(0);
 		}
 	}
 	private void calc() {
@@ -163,8 +168,9 @@ public class calculator extends JFrame implements ActionListener{
 			}
 		}
 		for(int i=1; i<data.size(); i=i+2) {
-			if(data.get(i)=="+") {
+			if("+".equals(data)) {
 				data.set(i-1, String.valueOf(Double.parseDouble(data.get(i-1))+Double.parseDouble(data.get(i+1))));
+				data.remove("+");
 			}
 			if(data.get(i)=="-") {
 				data.set(i-1, String.valueOf(Double.parseDouble(data.get(i-1))-Double.parseDouble(data.get(i+1))));
